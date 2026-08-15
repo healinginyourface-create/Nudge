@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "title": "한강에서 치맥하기",
+    "category": "food",
+    "location": "한강공원",
+    "cost": 15000,
+    "duration": 180,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 2,
+    "title": "서울숲 산책하기",
+    "category": "nature",
+    "location": "서울숲",
+    "cost": 0,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 3,
+    "title": "경복궁 구경하기",
+    "category": "culture",
+    "location": "경복궁",
+    "cost": 3000,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 4,
+    "title": "북촌한옥마을 돌아보기",
+    "category": "culture",
+    "location": "북촌한옥마을",
+    "cost": 0,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 5,
+    "title": "DDP 구경하기",
+    "category": "culture",
+    "location": "DDP",
+    "cost": 0,
+    "duration": 90,
+    "people": ["alone", "friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 6,
+    "title": "인사동 구경하기",
+    "category": "culture",
+    "location": "인사동",
+    "cost": 0,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 7,
+    "title": "남산서울타워 가기",
+    "category": "tour",
+    "location": "남산",
+    "cost": 21000,
+    "duration": 180,
+    "people": ["friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 8,
+    "title": "롯데월드 가기",
+    "category": "activity",
+    "location": "잠실",
+    "cost": 62000,
+    "duration": 360,
+    "people": ["friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 9,
+    "title": "방탈출 카페 가기",
+    "category": "activity",
+    "location": "서울",
+    "cost": 30000,
+    "duration": 120,
+    "people": ["friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 10,
+    "title": "보드게임 카페 가기",
+    "category": "activity",
+    "location": "서울",
+    "cost": 10000,
+    "duration": 180,
+    "people": ["friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 11,
+    "title": "볼링 치기",
+    "category": "sports",
+    "location": "서울",
+    "cost": 15000,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 12,
+    "title": "스크린 야구하기",
+    "category": "sports",
+    "location": "서울",
+    "cost": 20000,
+    "duration": 120,
+    "people": ["friend"],
+    "indoor": true
+  },
+  {
+    "id": 13,
+    "title": "클라이밍 체험하기",
+    "category": "sports",
+    "location": "서울",
+    "cost": 20000,
+    "duration": 120,
+    "people": ["alone", "friend"],
+    "indoor": true
+  },
+  {
+    "id": 14,
+    "title": "자전거 타기",
+    "category": "sports",
+    "location": "한강",
+    "cost": 10000,
+    "duration": 180,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 15,
+    "title": "카페에서 독서하기",
+    "category": "relax",
+    "location": "서울",
+    "cost": 7000,
+    "duration": 120,
+    "people": ["alone"],
+    "indoor": true
+  },
+  {
+    "id": 16,
+    "title": "새로운 카페 찾아가기",
+    "category": "food",
+    "location": "서울",
+    "cost": 10000,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 17,
+    "title": "맛집 웨이팅 도전하기",
+    "category": "food",
+    "location": "서울",
+    "cost": 20000,
+    "duration": 150,
+    "people": ["friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 18,
+    "title": "성수동 돌아다니기",
+    "category": "tour",
+    "location": "성수",
+    "cost": 10000,
+    "duration": 180,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 19,
+    "title": "익선동 구경하기",
+    "category": "tour",
+    "location": "익선동",
+    "cost": 10000,
+    "duration": 150,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 20,
+    "title": "한강 야경 보기",
+    "category": "nature",
+    "location": "한강",
+    "cost": 0,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 21,
+    "title": "영화 보기",
+    "category": "culture",
+    "location": "서울",
+    "cost": 15000,
+    "duration": 150,
+    "people": ["alone", "friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 22,
+    "title": "미술관 방문하기",
+    "category": "culture",
+    "location": "서울",
+    "cost": 10000,
+    "duration": 150,
+    "people": ["alone", "friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 23,
+    "title": "사진 찍으러 가기",
+    "category": "creative",
+    "location": "서울",
+    "cost": 0,
+    "duration": 180,
+    "people": ["alone", "friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 24,
+    "title": "필름카메라로 서울 찍기",
+    "category": "creative",
+    "location": "서울",
+    "cost": 15000,
+    "duration": 180,
+    "people": ["alone", "friend"],
+    "indoor": false
+  },
+  {
+    "id": 25,
+    "title": "향수 만들기 체험",
+    "category": "creative",
+    "location": "서울",
+    "cost": 50000,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 26,
+    "title": "도자기 만들기 체험",
+    "category": "creative",
+    "location": "서울",
+    "cost": 40000,
+    "duration": 150,
+    "people": ["alone", "friend", "couple"],
+    "indoor": true
+  },
+  {
+    "id": 27,
+    "title": "러닝하기",
+    "category": "sports",
+    "location": "한강",
+    "cost": 0,
+    "duration": 60,
+    "people": ["alone", "friend"],
+    "indoor": false
+  },
+  {
+    "id": 28,
+    "title": "야경 보면서 드라이브하기",
+    "category": "tour",
+    "location": "서울",
+    "cost": 20000,
+    "duration": 180,
+    "people": ["friend", "couple"],
+    "indoor": false
+  },
+  {
+    "id": 29,
+    "title": "노래방 가기",
+    "category": "activity",
+    "location": "서울",
+    "cost": 10000,
+    "duration": 120,
+    "people": ["friend"],
+    "indoor": true
+  },
+  {
+    "id": 30,
+    "title": "집에서 새로운 요리 해보기",
+    "category": "food",
+    "location": "집",
+    "cost": 15000,
+    "duration": 120,
+    "people": ["alone", "friend", "couple"],
+    "indoor": true
+  }
+]

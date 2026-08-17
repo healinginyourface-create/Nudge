@@ -1,32 +1,150 @@
 const API_URL = "http://127.0.0.1:8000";
 
 const card = document.getElementById("card");
+
 const likeButton = document.getElementById("like");
 const dislikeButton = document.getElementById("dislike");
+const recommendButton = document.getElementById("recommend");
+
+const peopleButtons = document.querySelectorAll(".people");
+const budgetButtons = document.querySelectorAll(".budget");
+const placeButtons = document.querySelectorAll(".place");
+
+
+let selectedPeople = null;
+let selectedBudget = null;
+let selectedIndoor = null;
 
 let isDragging = false;
 let startX = 0;
 let currentX = 0;
 
 
+// ============================
+// 조건 선택
+// ============================
+
+function selectOption(buttons, selectedValue, setter) {
+
+    buttons.forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            buttons.forEach(item => {
+                item.classList.remove("selected");
+            });
+
+            button.classList.add("selected");
+
+            setter(button.dataset.value);
+        });
+
+    });
+}
+
+
+// 누구와?
+selectOption(
+    peopleButtons,
+    selectedPeople,
+    value => {
+        selectedPeople = value;
+    }
+);
+
+
+// 예산
+selectOption(
+    budgetButtons,
+    selectedBudget,
+    value => {
+        selectedBudget = value;
+    }
+);
+
+
+// 장소
+selectOption(
+    placeButtons,
+    selectedIndoor,
+    value => {
+
+        if (value === "all") {
+            selectedIndoor = null;
+        } else {
+            selectedIndoor = value === "true";
+        }
+
+    }
+);
+
+
+// ============================
+// 추천 요청
+// ============================
+
 async function getRecommendation() {
+
+    card.innerHTML = `
+        <div class="loading">
+            추천을 고르는 중...
+        </div>
+    `;
+
+
     try {
-        const response = await fetch(`${API_URL}/recommend`);
+
+        const params = new URLSearchParams();
+
+
+        if (selectedPeople !== null) {
+            params.append("people", selectedPeople);
+        }
+
+
+        if (selectedBudget !== null) {
+            params.append("max_cost", selectedBudget);
+        }
+
+
+        if (selectedIndoor !== null) {
+            params.append("indoor", selectedIndoor);
+        }
+
+
+        const url =
+            `${API_URL}/recommend?${params.toString()}`;
+
+
+        console.log("추천 요청:", url);
+
+
+        const response = await fetch(url);
+
 
         if (!response.ok) {
             throw new Error("추천을 가져오지 못했습니다.");
         }
 
+
         const activity = await response.json();
 
+
         if (activity.message) {
-            card.innerHTML = `<h2>${activity.message}</h2>`;
+
+            card.innerHTML = `
+                <h2>${activity.message}</h2>
+            `;
+
             return;
         }
 
+
         showActivity(activity);
 
+
     } catch (error) {
+
         card.innerHTML = `
             <h2>오류가 발생했습니다.</h2>
             <p>${error.message}</p>
@@ -37,22 +155,45 @@ async function getRecommendation() {
 }
 
 
+// ============================
+// 활동 카드
+// ============================
+
 function showActivity(activity) {
+
     card.innerHTML = `
         <h2>${activity.title}</h2>
-        <p class="info">📍 ${activity.location}</p>
-        <p class="info">💰 ${activity.cost.toLocaleString()}원</p>
-        <p class="info">⏱ ${activity.duration}분</p>
+
+        <p class="info">
+            📍 ${activity.location}
+        </p>
+
+        <p class="info">
+            💰 ${activity.cost.toLocaleString()}원
+        </p>
+
+        <p class="info">
+            ⏱ ${activity.duration}분
+        </p>
     `;
 
-    card.style.transform = "translateX(0) rotate(0deg)";
+
+    card.style.transform =
+        "translateX(0) rotate(0deg)";
+
     card.style.transition = "none";
     card.style.cursor = "grab";
 }
 
 
+// ============================
+// 카드 드래그
+// ============================
+
 function startDrag(event) {
+
     isDragging = true;
+
     startX = event.clientX;
 
     card.style.transition = "none";
@@ -63,13 +204,19 @@ function startDrag(event) {
 
 
 function drag(event) {
+
     if (!isDragging) {
         return;
     }
 
-    currentX = event.clientX - startX;
 
-    const rotation = currentX / 15;
+    currentX =
+        event.clientX - startX;
+
+
+    const rotation =
+        currentX / 15;
+
 
     card.style.transform =
         `translateX(${currentX}px) rotate(${rotation}deg)`;
@@ -77,56 +224,110 @@ function drag(event) {
 
 
 function endDrag() {
+
     if (!isDragging) {
         return;
     }
 
+
     isDragging = false;
+
     card.style.cursor = "grab";
+
 
     const threshold = 120;
 
+
     if (currentX > threshold) {
+
         swipe("like");
+
     } else if (currentX < -threshold) {
+
         swipe("dislike");
+
     } else {
-        card.style.transition = "transform 0.3s ease";
-        card.style.transform = "translateX(0) rotate(0deg)";
+
+        card.style.transition =
+            "transform 0.3s ease";
+
+        card.style.transform =
+            "translateX(0) rotate(0deg)";
     }
+
 
     currentX = 0;
 }
 
 
-function swipe(type) {
-    const direction = type === "like" ? 1 : -1;
+// ============================
+// 좋아요 / 싫어요
+// ============================
 
-    card.style.transition = "transform 0.4s ease";
+function swipe(type) {
+
+    const direction =
+        type === "like" ? 1 : -1;
+
+
+    card.style.transition =
+        "transform 0.4s ease";
+
 
     card.style.transform =
         `translateX(${direction * 600}px) rotate(${direction * 30}deg)`;
 
+
     setTimeout(() => {
+
         getRecommendation();
+
     }, 400);
 }
 
 
-card.addEventListener("pointerdown", startDrag);
-card.addEventListener("pointermove", drag);
-card.addEventListener("pointerup", endDrag);
-card.addEventListener("pointercancel", endDrag);
+// ============================
+// 이벤트 연결
+// ============================
+
+card.addEventListener(
+    "pointerdown",
+    startDrag
+);
 
 
-likeButton.addEventListener("click", () => {
-    swipe("like");
-});
+card.addEventListener(
+    "pointermove",
+    drag
+);
 
 
-dislikeButton.addEventListener("click", () => {
-    swipe("dislike");
-});
+card.addEventListener(
+    "pointerup",
+    endDrag
+);
 
 
-getRecommendation();
+card.addEventListener(
+    "pointercancel",
+    endDrag
+);
+
+
+likeButton.addEventListener(
+    "click",
+    () => swipe("like")
+);
+
+
+dislikeButton.addEventListener(
+    "click",
+    () => swipe("dislike")
+);
+
+
+// 추천 버튼
+recommendButton.addEventListener(
+    "click",
+    getRecommendation
+);

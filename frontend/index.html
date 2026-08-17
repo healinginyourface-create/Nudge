@@ -3,26 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>WannaDo</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <main class="app">
+
         <h1>WannaDo</h1>
         <p class="subtitle">오늘 뭐 하지?</p>
 
+
+        <!-- 조건 선택 -->
+        <section class="filters">
+
+            <h3>누구와?</h3>
+
+            <div class="options">
+                <button class="option people" data-value="alone">
+                    혼자
+                </button>
+
+                <button class="option people" data-value="friend">
+                    친구
+                </button>
+
+                <button class="option people" data-value="couple">
+                    연인
+                </button>
+            </div>
+
+
+            <h3>예산</h3>
+
+            <div class="options">
+                <button class="option budget" data-value="10000">
+                    1만원 이하
+                </button>
+
+                <button class="option budget" data-value="30000">
+                    3만원 이하
+                </button>
+
+                <button class="option budget" data-value="50000">
+                    5만원 이하
+                </button>
+            </div>
+
+
+            <h3>장소</h3>
+
+            <div class="options">
+                <button class="option place" data-value="all">
+                    상관없음
+                </button>
+
+                <button class="option place" data-value="true">
+                    실내
+                </button>
+
+                <button class="option place" data-value="false">
+                    야외
+                </button>
+            </div>
+
+        </section>
+
+
+        <!-- 추천 카드 -->
+
         <div id="card" class="card">
-            <div class="loading">추천을 불러오는 중...</div>
+
+            <div class="loading">
+                조건을 선택해주세요.
+            </div>
+
         </div>
+
+
+        <!-- 추천 버튼 -->
+
+        <button id="recommend" class="recommend-button">
+            🎲 추천받기
+        </button>
+
+
+        <!-- 기존 좋아요 / 싫어요 -->
 
         <div class="buttons">
-            <button id="dislike" class="button dislike">✕</button>
-            <button id="like" class="button like">♥</button>
+
+            <button id="dislike" class="button dislike">
+                ✕
+            </button>
+
+            <button id="like" class="button like">
+                ♥
+            </button>
+
         </div>
+
     </main>
 
+
     <script src="app.js"></script>
+
 </body>
 </html>

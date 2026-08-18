@@ -24,7 +24,7 @@ let currentX = 0;
 // 조건 선택
 // ============================
 
-function selectOption(buttons, selectedValue, setter) {
+function selectOption(buttons, setter) {
 
     buttons.forEach(button => {
 
@@ -46,7 +46,6 @@ function selectOption(buttons, selectedValue, setter) {
 // 누구와?
 selectOption(
     peopleButtons,
-    selectedPeople,
     value => {
         selectedPeople = value;
     }
@@ -56,7 +55,6 @@ selectOption(
 // 예산
 selectOption(
     budgetButtons,
-    selectedBudget,
     value => {
         selectedBudget = value;
     }
@@ -66,7 +64,6 @@ selectOption(
 // 장소
 selectOption(
     placeButtons,
-    selectedIndoor,
     value => {
 
         if (value === "all") {
@@ -90,7 +87,6 @@ async function getRecommendation() {
             추천을 고르는 중...
         </div>
     `;
-
 
     try {
 
@@ -161,7 +157,36 @@ async function getRecommendation() {
 
 function showActivity(activity) {
 
+    const peopleText = activity.people
+        .map(person => {
+
+            if (person === "alone") {
+                return "혼자";
+            }
+
+            if (person === "friend") {
+                return "친구";
+            }
+
+            if (person === "couple") {
+                return "연인";
+            }
+
+            return person;
+        })
+        .join(" · ");
+
+
+    const placeText = activity.indoor
+        ? "실내"
+        : "야외";
+
+
     card.innerHTML = `
+        <p class="category">
+            ${activity.category}
+        </p>
+
         <h2>${activity.title}</h2>
 
         <p class="info">
@@ -174,6 +199,14 @@ function showActivity(activity) {
 
         <p class="info">
             ⏱ ${activity.duration}분
+        </p>
+
+        <p class="info">
+            🏠 ${placeText}
+        </p>
+
+        <p class="info">
+            👥 ${peopleText}
         </p>
     `;
 

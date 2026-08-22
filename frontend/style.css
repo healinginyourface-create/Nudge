@@ -1,194 +1,320 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
+
+:root {
+    --lime: #B7F34A;
+    --black: #050505;
+    --dark: #111111;
+    --white: #FFFFFF;
+    --gray: #8A8A8A;
+}
+
+
 body {
-    margin: 0;
     min-height: 100vh;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    font-family: Arial, sans-serif;
+    background: #EDEDED;
 
-    background: #f5f5f5;
-    color: #222;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: white;
 }
 
-.app {
-    width: 100%;
-    max-width: 420px;
 
-    padding: 30px 20px;
+/* ========================= */
+/* Phone */
+/* ========================= */
+
+.phone {
+    position: relative;
+
+    width: 390px;
+    height: 820px;
+
+    background: var(--black);
+
+    border-radius: 38px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ========================= */
+/* Header */
+/* ========================= */
+
+.header {
+    height: 92px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.logo {
+    font-family: monospace;
+
+    font-size: 28px;
+    font-weight: 900;
+
+    letter-spacing: -2px;
+
+    color: white;
+}
+
+
+/* ========================= */
+/* Filters */
+/* ========================= */
+
+.filters {
+
+    position: relative;
+
+    margin: 0 18px;
+
+    height: 46px;
+
+    display: flex;
+
+    background: #06416F;
+
+    border-radius: 13px;
+
+    overflow: hidden;
+}
+
+
+.filter {
+
+    flex: 1;
+
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.filter + .filter {
+    border-left: 1px solid rgba(255,255,255,0.35);
+}
+
+
+.filter:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+
+.filter.selected {
+    background: var(--lime);
+    color: black;
+}
+
+
+/* ========================= */
+/* Main */
+/* ========================= */
+
+.main {
+
+    position: absolute;
+
+    top: 155px;
+    bottom: 90px;
+
+    left: 0;
+    right: 0;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ========================= */
+/* Card Stack */
+/* ========================= */
+
+.card-stack {
+
+    position: relative;
+
+    width: 320px;
+    height: 450px;
+}
+
+
+.card-back {
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 14px;
+}
+
+
+.card-back-2 {
+
+    transform:
+        translateY(-20px)
+        scale(0.94);
+
+    background: #06416F;
+}
+
+
+.card-back-1 {
+
+    transform:
+        translateY(-10px)
+        scale(0.97);
+
+    background: #0A5792;
+}
+
+
+/* ========================= */
+/* Main Card */
+/* ========================= */
+
+.card {
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 35px;
+
+    background: #0968BA;
+
+    border-radius: 14px;
+
+    cursor: grab;
+
+    user-select: none;
+
+    touch-action: none;
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+}
+
+
+.card:active {
+    cursor: grabbing;
+}
+
+
+.card h2 {
+
+    text-align: center;
+
+    font-size: 27px;
+
+    line-height: 1.3;
+
+    font-weight: 800;
+}
+
+
+.card .info {
+
+    margin-top: 12px;
+
+    font-size: 14px;
+
+    color: rgba(255,255,255,0.8);
+}
+
+
+.loading {
+
+    font-size: 18px;
+
+    color: rgba(255,255,255,0.7);
 
     text-align: center;
 }
 
-h1 {
-    margin: 0;
-    font-size: 42px;
-}
 
-.subtitle {
-    margin-top: 8px;
-    margin-bottom: 25px;
-    color: #777;
-}
+/* ========================= */
+/* Bottom Navigation */
+/* ========================= */
 
+.bottom-nav {
 
-/* =========================
-   조건 선택
-========================= */
+    position: absolute;
 
-.filters {
-    margin-bottom: 25px;
-}
+    left: 50%;
 
-.filters h3 {
-    margin: 18px 0 10px;
-    font-size: 16px;
-}
+    bottom: 18px;
 
-.options {
+    transform: translateX(-50%);
+
+    height: 48px;
+
+    padding: 4px;
+
     display: flex;
-    gap: 8px;
 
-    justify-content: center;
-    flex-wrap: wrap;
+    gap: 2px;
+
+    background: #1B1B1B;
+
+    border-radius: 30px;
+
+    border: 1px solid #444;
 }
 
-.option {
+
+.nav-button {
+
+    width: 58px;
+    height: 40px;
+
     border: none;
 
-    padding: 10px 16px;
+    border-radius: 22px;
 
-    border-radius: 20px;
+    background: transparent;
 
-    background: #e9e9e9;
-    color: #444;
-
-    cursor: pointer;
-
-    font-size: 14px;
-
-    transition: 0.2s;
-}
-
-.option:hover {
-    background: #ddd;
-}
-
-.option.selected {
-    background: #222;
     color: white;
-}
-
-
-/* =========================
-   추천 카드
-========================= */
-
-.card {
-    min-height: 220px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    padding: 30px 20px;
-
-    background: white;
-
-    border-radius: 20px;
-
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.08);
-
-    touch-action: none;
-    user-select: none;
-}
-
-.category {
-    margin: 0 0 8px;
-
-    font-size: 13px;
-    font-weight: bold;
-
-    color: #888;
-
-    text-transform: uppercase;
-}
-
-.card h2 {
-    margin-bottom: 20px;
-    font-size: 25px;
-}
-
-.info {
-    margin: 8px 0;
-    color: #555;
-}
-
-.loading {
-    color: #888;
-}
-
-
-/* =========================
-   추천 버튼
-========================= */
-
-.recommend-button {
-    width: 100%;
-
-    margin-top: 18px;
-
-    padding: 15px;
-
-    border: none;
-    border-radius: 14px;
-
-    background: #222;
-    color: white;
-
-    font-size: 17px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.recommend-button:hover {
-    transform: translateY(-2px);
-}
-
-.recommend-button:active {
-    transform: translateY(0);
-}
-
-
-/* =========================
-   좋아요 / 싫어요
-========================= */
-
-.buttons {
-    display: flex;
-
-    justify-content: center;
-
-    gap: 25px;
-
-    margin-top: 20px;
-}
-
-.button {
-    width: 60px;
-    height: 60px;
-
-    border: none;
-    border-radius: 50%;
 
     font-size: 24px;
 
@@ -197,16 +323,372 @@ h1 {
     transition: 0.2s;
 }
 
-.button:hover {
-    transform: scale(1.08);
+
+.nav-button.active {
+
+    background: #3A3A3A;
 }
 
-.dislike {
-    background: #eee;
-    color: #555;
+
+.nav-button:hover {
+
+    color: var(--lime);
 }
 
-.like {
-    background: #222;
+
+/* ========================= */
+/* Modal */
+/* ========================= */
+
+.modal {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 50;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    background: rgba(0,0,0,0.55);
+}
+
+
+.modal.hidden {
+    display: none;
+}
+
+
+.modal-content {
+
+    width: 100%;
+
+    padding: 25px;
+
+    background: #181818;
+
+    border-radius:
+        25px 25px 0 0;
+}
+
+
+.modal-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+
+.modal-header h2 {
+
+    font-size: 22px;
+}
+
+
+.close-button {
+
+    border: none;
+
+    background: transparent;
+
     color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+
+.modal-options {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+
+.modal-option {
+
+    padding: 14px;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
+
+    background: #222;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 15px;
+}
+
+
+.modal-option:hover,
+.modal-option.selected {
+
+    background: var(--lime);
+
+    color: black;
+
+    border-color: var(--lime);
+}
+
+
+/* ========================= */
+/* Pages */
+/* ========================= */
+
+.page {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 40;
+
+    background: var(--black);
+
+    padding: 35px 22px;
+}
+
+
+.page.hidden {
+    display: none;
+}
+
+
+.page-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 30px;
+}
+
+
+.page-header h2 {
+
+    font-size: 30px;
+}
+
+
+.page-close {
+
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 30px;
+
+    cursor: pointer;
+}
+
+
+/* ========================= */
+/* Saved */
+/* ========================= */
+
+.saved-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    max-height: 680px;
+
+    overflow-y: auto;
+}
+
+
+.saved-item {
+
+    padding: 18px;
+
+    background: #181818;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+
+.saved-item h3 {
+
+    font-size: 16px;
+}
+
+
+.saved-item p {
+
+    margin-top: 5px;
+
+    font-size: 12px;
+
+    color: var(--gray);
+}
+
+
+.remove-saved {
+
+    border: none;
+
+    background: transparent;
+
+    color: #777;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+
+.empty {
+
+    color: #777;
+
+    text-align: center;
+
+    margin-top: 100px;
+}
+
+
+/* ========================= */
+/* My */
+/* ========================= */
+
+.profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 20px;
+
+    background: #181818;
+
+    border-radius: 18px;
+}
+
+
+.profile-circle {
+
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: var(--lime);
+
+    color: black;
+
+    font-weight: 900;
+
+    font-size: 20px;
+}
+
+
+.profile h3 {
+
+    font-size: 18px;
+}
+
+
+.profile p {
+
+    margin-top: 4px;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+.my-section {
+
+    margin-top: 35px;
+}
+
+
+.my-section h3 {
+
+    margin-bottom: 15px;
+
+    font-size: 16px;
+}
+
+
+.my-tags {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+
+.my-tags span {
+
+    padding: 8px 12px;
+
+    background: #222;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    color: #ccc;
+}
+
+
+/* ========================= */
+/* Mobile */
+/* ========================= */
+
+@media (max-width: 500px) {
+
+    body {
+        background: var(--black);
+    }
+
+
+    .phone {
+
+        width: 100vw;
+        height: 100vh;
+
+        border-radius: 0;
+
+        box-shadow: none;
+    }
+
 }

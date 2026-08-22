@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Nudge</title>
 
@@ -11,104 +12,234 @@
 
 <body>
 
-    <main class="app">
+<div class="phone">
 
-        <h1>Nudge</h1>
-        <p class="subtitle">오늘 뭐 하지?</p>
+    <!-- ========================= -->
+    <!-- Header -->
+    <!-- ========================= -->
 
+    <header class="header">
 
-        <!-- 조건 선택 -->
-        <section class="filters">
-
-            <h3>누구와?</h3>
-
-            <div class="options">
-                <button class="option people" data-value="alone">
-                    혼자
-                </button>
-
-                <button class="option people" data-value="friend">
-                    친구
-                </button>
-
-                <button class="option people" data-value="couple">
-                    연인
-                </button>
-            </div>
-
-
-            <h3>예산</h3>
-
-            <div class="options">
-                <button class="option budget" data-value="10000">
-                    1만원 이하
-                </button>
-
-                <button class="option budget" data-value="30000">
-                    3만원 이하
-                </button>
-
-                <button class="option budget" data-value="50000">
-                    5만원 이하
-                </button>
-            </div>
-
-
-            <h3>장소</h3>
-
-            <div class="options">
-                <button class="option place" data-value="all">
-                    상관없음
-                </button>
-
-                <button class="option place" data-value="true">
-                    실내
-                </button>
-
-                <button class="option place" data-value="false">
-                    야외
-                </button>
-            </div>
-
-        </section>
-
-
-        <!-- 추천 카드 -->
-
-        <div id="card" class="card">
-
-            <div class="loading">
-                조건을 선택해주세요.
-            </div>
-
+        <div class="logo">
+            NUDGE
         </div>
 
+    </header>
 
-        <!-- 추천 버튼 -->
 
-        <button id="recommend" class="recommend-button">
-            🎲 추천받기
+    <!-- ========================= -->
+    <!-- Filters -->
+    <!-- ========================= -->
+
+    <section class="filters">
+
+        <button class="filter" id="locationFilter">
+            🌍
         </button>
 
+        <button class="filter" id="peopleFilter">
+            🧘
+        </button>
 
-        <!-- 기존 좋아요 / 싫어요 -->
+        <button class="filter" id="categoryFilter">
+            🔥
+        </button>
 
-        <div class="buttons">
+        <button class="filter" id="budgetFilter">
+            💰
+        </button>
 
-            <button id="dislike" class="button dislike">
-                ✕
-            </button>
+    </section>
 
-            <button id="like" class="button like">
-                ♥
-            </button>
+
+    <!-- ========================= -->
+    <!-- Card Area -->
+    <!-- ========================= -->
+
+    <main class="main">
+
+        <div class="card-stack">
+
+            <div class="card-back card-back-2"></div>
+            <div class="card-back card-back-1"></div>
+
+            <div id="card" class="card">
+
+                <div class="loading">
+                    오늘 뭐 하지?
+                </div>
+
+            </div>
 
         </div>
 
     </main>
 
 
-    <script src="app.js"></script>
+    <!-- ========================= -->
+    <!-- Bottom Navigation -->
+    <!-- ========================= -->
+
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-button"
+            id="savedButton">
+
+            <span>♡</span>
+
+        </button>
+
+
+        <button
+            class="nav-button active"
+            id="homeButton">
+
+            <span>▣</span>
+
+        </button>
+
+
+        <button
+            class="nav-button"
+            id="myButton">
+
+            <span>♙</span>
+
+        </button>
+
+    </nav>
+
+
+    <!-- ========================= -->
+    <!-- Filter Modal -->
+    <!-- ========================= -->
+
+    <div
+        id="filterModal"
+        class="modal hidden">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">
+                    필터
+                </h2>
+
+                <button
+                    id="closeModal"
+                    class="close-button">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="modalOptions"
+                class="modal-options">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Saved Page -->
+    <!-- ========================= -->
+
+    <section
+        id="savedPage"
+        class="page hidden">
+
+        <div class="page-header">
+
+            <h2>Saved</h2>
+
+            <button
+                id="closeSaved"
+                class="page-close">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div
+            id="savedList"
+            class="saved-list">
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- My Page -->
+    <!-- ========================= -->
+
+    <section
+        id="myPage"
+        class="page hidden">
+
+        <div class="page-header">
+
+            <h2>My</h2>
+
+            <button
+                id="closeMy"
+                class="page-close">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="my-content">
+
+            <div class="profile">
+
+                <div class="profile-circle">
+                    H
+                </div>
+
+                <div>
+                    <h3>Hyun</h3>
+                    <p>Nudge user</p>
+                </div>
+
+            </div>
+
+
+            <div class="my-section">
+
+                <h3>오늘의 취향</h3>
+
+                <div class="my-tags">
+
+                    <span>가벼운 활동</span>
+                    <span>서울</span>
+                    <span>새로운 경험</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+<script src="app.js"></script>
 
 </body>
 </html>

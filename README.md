@@ -1,4 +1,4 @@
-# WannaDo
+# Nudge
 
 심심할 때 무엇을 할지 추천해주는 스와이프 기반 활동 추천 웹앱입니다.
 
@@ -14,7 +14,7 @@
 ## Project Structure
 
 ```text
-WannaDo/
+Nudge/
 ├── backend/
 │   └── main.py
 ├── data/

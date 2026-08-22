@@ -6,7 +6,7 @@ import random
 from pathlib import Path
 
 
-app = FastAPI(title="WannaDo API")
+app = FastAPI(title="Nudge API")
 
 
 # ============================
@@ -122,7 +122,7 @@ def get_current_time_slot():
 def root():
 
     return {
-        "message": "WannaDo API"
+        "message": "Nudge API"
     }
 
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
-import json
+from openpyxl import load_workbook
 import random
 from pathlib import Path
 
@@ -23,15 +23,75 @@ app.add_middleware(
 
 
 # ============================
-# 활동 데이터
+# Excel 활동 데이터
 # ============================
 
-DATA_PATH = Path(__file__).parent.parent / "data" / "activities.json"
+DATA_PATH = Path(__file__).parent.parent / "data" / "activities.xlsx"
 
 
 def load_activities():
-    with open(DATA_PATH, "r", encoding="utf-8") as file:
-        return json.load(file)
+
+    workbook = load_workbook(
+        DATA_PATH,
+        data_only=True
+    )
+
+    sheet = workbook["Activities"]
+
+    activities = []
+
+    headers = [
+        cell.value
+        for cell in sheet[1]
+    ]
+
+    for row in sheet.iter_rows(
+        min_row=2,
+        values_only=True
+    ):
+
+        if not row[0]:
+            continue
+
+        activity = dict(
+            zip(headers, row)
+        )
+
+        # people
+        if isinstance(activity.get("people"), str):
+
+            activity["people"] = [
+                person.strip()
+                for person in activity["people"].split(",")
+            ]
+
+        # time_slots
+        if isinstance(activity.get("time_slots"), str):
+
+            activity["time_slots"] = [
+                slot.strip()
+                for slot in activity["time_slots"].split(",")
+            ]
+
+        # Excel에서 숫자가 float으로 읽히는 경우 정리
+        if activity.get("cost") is not None:
+            activity["cost"] = int(activity["cost"])
+
+        if activity.get("duration") is not None:
+            activity["duration"] = int(activity["duration"])
+
+        # indoor
+        if isinstance(activity.get("indoor"), str):
+
+            activity["indoor"] = (
+                activity["indoor"].lower() == "true"
+            )
+
+        activities.append(activity)
+
+    workbook.close()
+
+    return activities
 
 
 # ============================
@@ -94,17 +154,21 @@ def get_recommendations(
 
     for activity in activities:
 
-        if category is not None and activity["category"] != category:
-            continue
+        if category is not None:
+            if activity["category"] != category:
+                continue
 
-        if max_cost is not None and activity["cost"] > max_cost:
-            continue
+        if max_cost is not None:
+            if activity["cost"] > max_cost:
+                continue
 
-        if people is not None and people not in activity["people"]:
-            continue
+        if people is not None:
+            if people not in activity["people"]:
+                continue
 
-        if indoor is not None and activity["indoor"] != indoor:
-            continue
+        if indoor is not None:
+            if activity["indoor"] != indoor:
+                continue
 
         recommendations.append(activity)
 
@@ -128,30 +192,34 @@ def recommend_activity(
     candidates = []
 
 
-    # ----------------------------
+    # ============================
     # 기본 조건 필터링
-    # ----------------------------
+    # ============================
 
     for activity in activities:
 
-        if category is not None and activity["category"] != category:
-            continue
+        if category is not None:
+            if activity["category"] != category:
+                continue
 
-        if max_cost is not None and activity["cost"] > max_cost:
-            continue
+        if max_cost is not None:
+            if activity["cost"] > max_cost:
+                continue
 
-        if people is not None and people not in activity["people"]:
-            continue
+        if people is not None:
+            if people not in activity["people"]:
+                continue
 
-        if indoor is not None and activity["indoor"] != indoor:
-            continue
+        if indoor is not None:
+            if activity["indoor"] != indoor:
+                continue
 
         candidates.append(activity)
 
 
-    # ----------------------------
+    # ============================
     # 조건에 맞는 활동이 없는 경우
-    # ----------------------------
+    # ============================
 
     if not candidates:
 
@@ -160,29 +228,30 @@ def recommend_activity(
         }
 
 
-    # ----------------------------
-    # 현재 시간대 확인
-    # ----------------------------
+    # ============================
+    # 현재 시간대
+    # ============================
 
     current_time_slot = get_current_time_slot()
 
 
-    # ----------------------------
+    # ============================
     # 시간대 기반 점수 계산
-    # ----------------------------
+    # ============================
 
     scored_candidates = []
-
 
     for activity in candidates:
 
         score = 0
 
-        time_slots = activity.get("time_slots", [])
+        time_slots = activity.get(
+            "time_slots",
+            []
+        )
 
-
-        # 현재 시간대에 적합하면 높은 점수
         if current_time_slot in time_slots:
+
             score += 3
 
 
@@ -191,19 +260,20 @@ def recommend_activity(
         )
 
 
-    # ----------------------------
-    # 가장 높은 점수 찾기
-    # ----------------------------
+    # ============================
+    # 최고 점수
+    # ============================
 
     max_score = max(
         score
-        for activity, score in scored_candidates
+        for activity, score
+        in scored_candidates
     )
 
 
-    # ----------------------------
-    # 최고 점수 활동만 추리기
-    # ----------------------------
+    # ============================
+    # 최고 점수 활동
+    # ============================
 
     best_candidates = [
 
@@ -216,8 +286,10 @@ def recommend_activity(
     ]
 
 
-    # ----------------------------
-    # 최고 점수 중 랜덤 추천
-    # ----------------------------
+    # ============================
+    # 랜덤 추천
+    # ============================
 
-    return random.choice(best_candidates)
+    return random.choice(
+        best_candidates
+    )

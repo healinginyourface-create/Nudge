@@ -2,12 +2,17 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Nudge</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 
 <body>
@@ -15,100 +20,162 @@
 <div class="phone">
 
     <!-- ========================= -->
-    <!-- Header -->
+    <!-- Main Home -->
     <!-- ========================= -->
 
-    <header class="header">
+    <section id="homePage" class="home-page">
 
-        <div class="logo">
-            NUDGE
-        </div>
+        <!-- Filter Bar -->
 
-    </header>
+        <section class="filters">
 
-
-    <!-- ========================= -->
-    <!-- Filters -->
-    <!-- ========================= -->
-
-    <section class="filters">
-
-        <button class="filter" id="locationFilter">
-            🌍
-        </button>
-
-        <button class="filter" id="peopleFilter">
-            🧘
-        </button>
-
-        <button class="filter" id="categoryFilter">
-            🔥
-        </button>
-
-        <button class="filter" id="budgetFilter">
-            💰
-        </button>
-
-    </section>
+            <button
+                class="filter"
+                id="locationFilter"
+            >
+                <span class="filter-icon">📍</span>
+                <span
+                    class="filter-label"
+                    id="locationLabel"
+                >
+                    어디로?
+                </span>
+            </button>
 
 
-    <!-- ========================= -->
-    <!-- Card Area -->
-    <!-- ========================= -->
+            <button
+                class="filter"
+                id="peopleFilter"
+            >
+                <span class="filter-icon">👤</span>
+                <span
+                    class="filter-label"
+                    id="peopleLabel"
+                >
+                    누구와?
+                </span>
+            </button>
 
-    <main class="main">
 
-        <div class="card-stack">
+            <button
+                class="filter"
+                id="categoryFilter"
+            >
+                <span class="filter-icon">✦</span>
+                <span
+                    class="filter-label"
+                    id="categoryLabel"
+                >
+                    무엇을?
+                </span>
+            </button>
 
-            <div class="card-back card-back-2"></div>
-            <div class="card-back card-back-1"></div>
 
-            <div id="card" class="card">
+            <button
+                class="filter"
+                id="budgetFilter"
+            >
+                <span class="filter-icon">₩</span>
+                <span
+                    class="filter-label"
+                    id="budgetLabel"
+                >
+                    얼마까지?
+                </span>
+            </button>
 
-                <div class="loading">
-                    오늘 뭐 하지?
+        </section>
+
+
+        <!-- Main -->
+
+        <main class="main">
+
+            <div class="headline">
+
+                <p class="eyebrow">
+                    TODAY'S NUDGE
+                </p>
+
+                <h1>
+                    오늘은<br>
+                    뭐 하지?
+                </h1>
+
+            </div>
+
+
+            <!-- Card -->
+
+            <div class="card-stack">
+
+                <div class="card-back card-back-2"></div>
+
+                <div class="card-back card-back-1"></div>
+
+
+                <div
+                    id="card"
+                    class="card"
+                >
+
+                    <div class="loading">
+
+                        <div class="loading-dot"></div>
+
+                        <p>
+                            오늘의 활동을<br>
+                            고르는 중...
+                        </p>
+
+                    </div>
+
                 </div>
 
             </div>
 
-        </div>
 
-    </main>
+            <div class="swipe-hint">
+                <span>← 넘기기</span>
+                <span>좋아요 →</span>
+            </div>
 
-
-    <!-- ========================= -->
-    <!-- Bottom Navigation -->
-    <!-- ========================= -->
-
-    <nav class="bottom-nav">
-
-        <button
-            class="nav-button"
-            id="savedButton">
-
-            <span>♡</span>
-
-        </button>
+        </main>
 
 
-        <button
-            class="nav-button active"
-            id="homeButton">
+        <!-- Bottom Navigation -->
 
-            <span>▣</span>
+        <nav class="bottom-nav">
 
-        </button>
+            <button
+                class="nav-button"
+                id="savedButton"
+            >
+                <span class="nav-icon">♡</span>
+                <span class="nav-label">저장</span>
+            </button>
 
 
-        <button
-            class="nav-button"
-            id="myButton">
+            <button
+                class="nav-button active"
+                id="homeButton"
+            >
+                <span class="nav-icon">⌂</span>
+                <span class="nav-label">홈</span>
+            </button>
 
-            <span>♙</span>
 
-        </button>
+            <button
+                class="nav-button"
+                id="myButton"
+            >
+                <span class="nav-icon">○</span>
+                <span class="nav-label">My</span>
+            </button>
 
-    </nav>
+        </nav>
+
+    </section>
 
 
     <!-- ========================= -->
@@ -117,22 +184,32 @@
 
     <div
         id="filterModal"
-        class="modal hidden">
+        class="modal hidden"
+    >
 
         <div class="modal-content">
 
+            <div class="modal-handle"></div>
+
+
             <div class="modal-header">
 
-                <h2 id="modalTitle">
-                    필터
-                </h2>
+                <div>
+                    <p class="modal-eyebrow">
+                        FILTER
+                    </p>
+
+                    <h2 id="modalTitle">
+                        필터
+                    </h2>
+                </div>
+
 
                 <button
                     id="closeModal"
-                    class="close-button">
-
+                    class="close-button"
+                >
                     ×
-
                 </button>
 
             </div>
@@ -140,8 +217,8 @@
 
             <div
                 id="modalOptions"
-                class="modal-options">
-            </div>
+                class="modal-options"
+            ></div>
 
         </div>
 
@@ -154,26 +231,36 @@
 
     <section
         id="savedPage"
-        class="page hidden">
+        class="page hidden"
+    >
 
         <div class="page-header">
 
-            <h2>Saved</h2>
+            <div>
+                <p class="page-eyebrow">
+                    YOUR PICKS
+                </p>
+
+                <h2>
+                    저장한 활동
+                </h2>
+            </div>
+
 
             <button
                 id="closeSaved"
-                class="page-close">
-
+                class="page-close"
+            >
                 ×
-
             </button>
 
         </div>
 
+
         <div
             id="savedList"
-            class="saved-list">
-        </div>
+            class="saved-list"
+        ></div>
 
     </section>
 
@@ -184,18 +271,27 @@
 
     <section
         id="myPage"
-        class="page hidden">
+        class="page hidden"
+    >
 
         <div class="page-header">
 
-            <h2>My</h2>
+            <div>
+                <p class="page-eyebrow">
+                    ABOUT YOU
+                </p>
+
+                <h2>
+                    My
+                </h2>
+            </div>
+
 
             <button
                 id="closeMy"
-                class="page-close">
-
+                class="page-close"
+            >
                 ×
-
             </button>
 
         </div>
@@ -203,31 +299,83 @@
 
         <div class="my-content">
 
+            <!-- Profile -->
+
             <div class="profile">
 
                 <div class="profile-circle">
                     H
                 </div>
 
-                <div>
-                    <h3>Hyun</h3>
-                    <p>Nudge user</p>
+
+                <div class="profile-info">
+
+                    <h3>
+                        Hyun
+                    </h3>
+
+                    <p>
+                        Nudge user
+                    </p>
+
                 </div>
 
             </div>
 
 
+            <!-- Taste -->
+
             <div class="my-section">
 
-                <h3>오늘의 취향</h3>
+                <div class="section-title">
+
+                    <span>
+                        오늘의 취향
+                    </span>
+
+                    <span class="section-count">
+                        03
+                    </span>
+
+                </div>
+
 
                 <div class="my-tags">
 
-                    <span>가벼운 활동</span>
-                    <span>서울</span>
-                    <span>새로운 경험</span>
+                    <span>
+                        가벼운 활동
+                    </span>
+
+                    <span>
+                        서울
+                    </span>
+
+                    <span>
+                        새로운 경험
+                    </span>
 
                 </div>
+
+            </div>
+
+
+            <!-- Concept -->
+
+            <div class="my-section nudge-message">
+
+                <p class="page-eyebrow">
+                    NUDGE
+                </p>
+
+                <h3>
+                    고민하는 시간을<br>
+                    줄여드릴게요.
+                </h3>
+
+                <p>
+                    당신이 좋아하는 활동을 알아갈수록
+                    Nudge는 더 좋은 하루를 제안합니다.
+                </p>
 
             </div>
 

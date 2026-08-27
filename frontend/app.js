@@ -5,7 +5,9 @@ const API_URL = "http://127.0.0.1:8000";
 /* Elements */
 /* ========================= */
 
-const card = document.getElementById("card");
+const card =
+    document.getElementById("card");
+
 
 const locationFilter =
     document.getElementById("locationFilter");
@@ -18,6 +20,19 @@ const categoryFilter =
 
 const budgetFilter =
     document.getElementById("budgetFilter");
+
+
+const locationLabel =
+    document.getElementById("locationLabel");
+
+const peopleLabel =
+    document.getElementById("peopleLabel");
+
+const categoryLabel =
+    document.getElementById("categoryLabel");
+
+const budgetLabel =
+    document.getElementById("budgetLabel");
 
 
 const filterModal =
@@ -68,11 +83,10 @@ let selectedPeople = null;
 let selectedCategory = null;
 let selectedBudget = null;
 
-
 let currentActivity = null;
 
-
 let isDragging = false;
+
 let startX = 0;
 let currentX = 0;
 
@@ -215,7 +229,9 @@ const filterData = {
 
 function openFilter(type) {
 
-    const data = filterData[type];
+    const data =
+        filterData[type];
+
 
     modalTitle.textContent =
         data.title;
@@ -228,19 +244,23 @@ function openFilter(type) {
 
 
     if (type === "location") {
-        currentValue = selectedLocation;
+        currentValue =
+            selectedLocation;
     }
 
     if (type === "people") {
-        currentValue = selectedPeople;
+        currentValue =
+            selectedPeople;
     }
 
     if (type === "category") {
-        currentValue = selectedCategory;
+        currentValue =
+            selectedCategory;
     }
 
     if (type === "budget") {
-        currentValue = selectedBudget;
+        currentValue =
+            selectedBudget;
     }
 
 
@@ -258,7 +278,10 @@ function openFilter(type) {
             option.label;
 
 
-        if (option.value === currentValue) {
+        if (
+            option.value ===
+            currentValue
+        ) {
 
             button.classList.add(
                 "selected"
@@ -271,30 +294,54 @@ function openFilter(type) {
             "click",
             () => {
 
-                if (type === "location") {
+                if (
+                    type ===
+                    "location"
+                ) {
+
                     selectedLocation =
                         option.value;
+
                 }
 
-                if (type === "people") {
+
+                if (
+                    type ===
+                    "people"
+                ) {
+
                     selectedPeople =
                         option.value;
+
                 }
 
-                if (type === "category") {
+
+                if (
+                    type ===
+                    "category"
+                ) {
+
                     selectedCategory =
                         option.value;
+
                 }
 
-                if (type === "budget") {
+
+                if (
+                    type ===
+                    "budget"
+                ) {
+
                     selectedBudget =
                         option.value;
+
                 }
 
 
                 updateFilterButton(
                     type,
-                    option.value
+                    option.value,
+                    option.label
                 );
 
 
@@ -304,6 +351,7 @@ function openFilter(type) {
 
 
                 getRecommendation();
+
             }
         );
 
@@ -322,31 +370,60 @@ function openFilter(type) {
 
 
 /* ========================= */
-/* Filter Button State */
+/* Filter Button */
 /* ========================= */
 
 function updateFilterButton(
     type,
-    value
+    value,
+    label
 ) {
 
     let button;
+    let labelElement;
 
 
     if (type === "location") {
-        button = locationFilter;
+
+        button =
+            locationFilter;
+
+        labelElement =
+            locationLabel;
+
     }
+
 
     if (type === "people") {
-        button = peopleFilter;
+
+        button =
+            peopleFilter;
+
+        labelElement =
+            peopleLabel;
+
     }
+
 
     if (type === "category") {
-        button = categoryFilter;
+
+        button =
+            categoryFilter;
+
+        labelElement =
+            categoryLabel;
+
     }
 
+
     if (type === "budget") {
-        button = budgetFilter;
+
+        button =
+            budgetFilter;
+
+        labelElement =
+            budgetLabel;
+
     }
 
 
@@ -356,11 +433,53 @@ function updateFilterButton(
             "selected"
         );
 
-    } else {
+        labelElement.textContent =
+            label;
+
+    }
+
+    else {
 
         button.classList.remove(
             "selected"
         );
+
+
+        if (
+            type === "location"
+        ) {
+
+            labelElement.textContent =
+                "어디로?";
+
+        }
+
+        if (
+            type === "people"
+        ) {
+
+            labelElement.textContent =
+                "누구와?";
+
+        }
+
+        if (
+            type === "category"
+        ) {
+
+            labelElement.textContent =
+                "무엇을?";
+
+        }
+
+        if (
+            type === "budget"
+        ) {
+
+            labelElement.textContent =
+                "얼마까지?";
+
+        }
 
     }
 }
@@ -373,9 +492,18 @@ function updateFilterButton(
 async function getRecommendation() {
 
     card.innerHTML = `
+
         <div class="loading">
-            고르는 중...
+
+            <div class="loading-dot"></div>
+
+            <p>
+                오늘의 활동을<br>
+                고르는 중...
+            </p>
+
         </div>
+
     `;
 
 
@@ -385,7 +513,10 @@ async function getRecommendation() {
             new URLSearchParams();
 
 
-        if (selectedPeople !== null) {
+        if (
+            selectedPeople !==
+            null
+        ) {
 
             params.append(
                 "people",
@@ -395,7 +526,10 @@ async function getRecommendation() {
         }
 
 
-        if (selectedBudget !== null) {
+        if (
+            selectedBudget !==
+            null
+        ) {
 
             params.append(
                 "max_cost",
@@ -405,7 +539,10 @@ async function getRecommendation() {
         }
 
 
-        if (selectedCategory !== null) {
+        if (
+            selectedCategory !==
+            null
+        ) {
 
             params.append(
                 "category",
@@ -416,12 +553,10 @@ async function getRecommendation() {
 
 
         /*
-         * 현재 백엔드가 location 필터를
-         * 아직 지원하지 않으므로
-         * 일단 별도로 처리하지 않는다.
-         *
-         * 다음 단계에서 backend에
-         * location 필터를 추가하면 된다.
+         * 현재 백엔드가
+         * location을 아직 지원하지
+         * 않으므로 프론트에서만
+         * 선택 상태를 유지한다.
          */
 
 
@@ -449,9 +584,15 @@ async function getRecommendation() {
         if (activity.message) {
 
             card.innerHTML = `
-                <h2>
-                    ${activity.message}
-                </h2>
+
+                <div class="loading">
+
+                    <p>
+                        ${activity.message}
+                    </p>
+
+                </div>
+
             `;
 
             return;
@@ -462,20 +603,28 @@ async function getRecommendation() {
             activity;
 
 
-        showActivity(activity);
+        showActivity(
+            activity
+        );
 
     }
 
     catch (error) {
 
         card.innerHTML = `
-            <h2>
-                오류가 발생했습니다.
-            </h2>
 
-            <p class="info">
-                ${error.message}
-            </p>
+            <div class="loading">
+
+                <p>
+                    추천을 불러오지 못했어요.
+                </p>
+
+                <p class="card-description">
+                    ${error.message}
+                </p>
+
+            </div>
+
         `;
 
         console.error(error);
@@ -489,25 +638,111 @@ async function getRecommendation() {
 
 function showActivity(activity) {
 
+    const cost =
+        Number(activity.cost)
+            .toLocaleString();
+
+
+    const duration =
+        activity.duration
+            ? `${activity.duration}분`
+            : "시간 정보 없음";
+
+
+    /*
+     * description/image은
+     * 백엔드에 없어도 작동하도록
+     * 안전하게 처리한다.
+     */
+
+    const description =
+        activity.description ||
+        "오늘 하루에 가볍게 더해볼 만한 활동이에요.";
+
+
+    let imageHTML = `
+
+        <div class="card-image">
+
+            <div class="card-image-placeholder">
+                ✦
+            </div>
+
+        </div>
+
+    `;
+
+
+    /*
+     * 나중에 backend에서
+     * image 또는 image_url을
+     * 보내면 자동으로 이미지 사용.
+     */
+
+    const image =
+        activity.image ||
+        activity.image_url;
+
+
+    if (image) {
+
+        imageHTML = `
+
+            <div class="card-image">
+
+                <img
+                    src="${image}"
+                    alt="${activity.title}"
+                >
+
+            </div>
+
+        `;
+
+    }
+
+
     card.innerHTML = `
 
-        <h2>
-            ${activity.title}
-        </h2>
+        ${imageHTML}
 
-        <p class="info">
-            📍 ${activity.location}
-        </p>
 
-        <p class="info">
-            💰 ${Number(
-                activity.cost
-            ).toLocaleString()}원
-        </p>
+        <div class="card-content">
 
-        <p class="info">
-            ⏱ ${activity.duration}분
-        </p>
+            <span class="card-category">
+                TODAY
+            </span>
+
+
+            <h2>
+                ${activity.title}
+            </h2>
+
+
+            <p class="card-description">
+                ${description}
+            </p>
+
+
+            <div class="card-info">
+
+                <span class="info-chip">
+                    📍 ${activity.location}
+                </span>
+
+
+                <span class="info-chip">
+                    ₩ ${cost}
+                </span>
+
+
+                <span class="info-chip">
+                    ⏱ ${duration}
+                </span>
+
+            </div>
+
+        </div>
 
     `;
 
@@ -515,12 +750,17 @@ function showActivity(activity) {
     card.style.transition =
         "none";
 
+
     card.style.transform =
         "translateX(0) rotate(0deg)";
 
-    card.style.opacity = "1";
 
-    card.style.cursor = "grab";
+    card.style.opacity =
+        "1";
+
+
+    card.style.cursor =
+        "grab";
 }
 
 
@@ -537,12 +777,14 @@ function startDrag(event) {
 
     isDragging = true;
 
+
     startX =
         event.clientX;
 
 
     card.style.transition =
         "none";
+
 
     card.style.cursor =
         "grabbing";
@@ -562,7 +804,8 @@ function drag(event) {
 
 
     currentX =
-        event.clientX - startX;
+        event.clientX -
+        startX;
 
 
     const rotation =
@@ -584,20 +827,28 @@ function endDrag() {
 
     isDragging = false;
 
+
     card.style.cursor =
         "grab";
 
 
-    const threshold = 120;
+    const threshold =
+        120;
 
 
-    if (currentX > threshold) {
+    if (
+        currentX >
+        threshold
+    ) {
 
         swipe("like");
 
     }
 
-    else if (currentX < -threshold) {
+    else if (
+        currentX <
+        -threshold
+    ) {
 
         swipe("dislike");
 
@@ -607,6 +858,7 @@ function endDrag() {
 
         card.style.transition =
             "transform 0.3s ease";
+
 
         card.style.transform =
             "translateX(0) rotate(0deg)";
@@ -634,7 +886,9 @@ function swipe(type) {
             : -1;
 
 
-    if (type === "like") {
+    if (
+        type === "like"
+    ) {
 
         saveActivity(
             currentActivity
@@ -652,14 +906,18 @@ function swipe(type) {
          rotate(${direction * 30}deg)`;
 
 
-    card.style.opacity = "0";
+    card.style.opacity =
+        "0";
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        getRecommendation();
+            getRecommendation();
 
-    }, 350);
+        },
+        350
+    );
 }
 
 
@@ -677,7 +935,9 @@ function getSaved() {
 }
 
 
-function saveActivity(activity) {
+function saveActivity(
+    activity
+) {
 
     const saved =
         getSaved();
@@ -686,13 +946,16 @@ function saveActivity(activity) {
     const exists =
         saved.some(
             item =>
-                item.id === activity.id
+                item.id ===
+                activity.id
         );
 
 
     if (!exists) {
 
-        saved.push(activity);
+        saved.push(
+            activity
+        );
 
 
         localStorage.setItem(
@@ -729,12 +992,19 @@ function renderSaved() {
         getSaved();
 
 
-    if (saved.length === 0) {
+    if (
+        saved.length === 0
+    ) {
 
         savedList.innerHTML = `
+
             <div class="empty">
-                아직 저장한 활동이 없어요.
+
+                아직 저장한 활동이 없어요.<br>
+                마음에 드는 활동을 오른쪽으로 넘겨보세요.
+
             </div>
+
         `;
 
         return;
@@ -742,33 +1012,39 @@ function renderSaved() {
 
 
     savedList.innerHTML =
-        saved.map(activity => `
+        saved.map(
+            activity => `
 
-            <div class="saved-item">
+                <div class="saved-item">
 
-                <div>
+                    <div>
 
-                    <h3>
-                        ${activity.title}
-                    </h3>
+                        <h3>
+                            ${activity.title}
+                        </h3>
 
-                    <p>
-                        ${activity.location}
-                    </p>
+                        <p>
+                            📍 ${activity.location}
+                            ·
+                            ₩ ${Number(
+                                activity.cost
+                            ).toLocaleString()}원
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="remove-saved"
+                        onclick="removeSaved(${activity.id})"
+                    >
+                        ×
+                    </button>
 
                 </div>
 
-                <button
-                    class="remove-saved"
-                    onclick="removeSaved(${activity.id})">
-
-                    ×
-
-                </button>
-
-            </div>
-
-        `).join("");
+            `
+        ).join("");
 }
 
 
@@ -785,6 +1061,7 @@ function showHome() {
     myPage.classList.add(
         "hidden"
     );
+
 
     homeButton.classList.add(
         "active"
@@ -804,6 +1081,7 @@ function showSaved() {
 
     renderSaved();
 
+
     savedPage.classList.remove(
         "hidden"
     );
@@ -811,6 +1089,7 @@ function showSaved() {
     myPage.classList.add(
         "hidden"
     );
+
 
     homeButton.classList.remove(
         "active"
@@ -836,6 +1115,7 @@ function showMy() {
         "hidden"
     );
 
+
     homeButton.classList.remove(
         "active"
     );
@@ -856,34 +1136,40 @@ function showMy() {
 
 locationFilter.addEventListener(
     "click",
-    () => openFilter("location")
+    () =>
+        openFilter("location")
 );
 
 
 peopleFilter.addEventListener(
     "click",
-    () => openFilter("people")
+    () =>
+        openFilter("people")
 );
 
 
 categoryFilter.addEventListener(
     "click",
-    () => openFilter("category")
+    () =>
+        openFilter("category")
 );
 
 
 budgetFilter.addEventListener(
     "click",
-    () => openFilter("budget")
+    () =>
+        openFilter("budget")
 );
 
 
 closeModal.addEventListener(
     "click",
     () => {
+
         filterModal.classList.add(
             "hidden"
         );
+
     }
 );
 
@@ -936,6 +1222,10 @@ closeMy.addEventListener(
     showHome
 );
 
+
+/* ========================= */
+/* Card Pointer Events */
+/* ========================= */
 
 card.addEventListener(
     "pointerdown",

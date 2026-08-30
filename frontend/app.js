@@ -1,1258 +1,454 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL="http://127.0.0.1:8000";
 
+const $=id=>document.getElementById(id);
 
-/* ========================= */
-/* Elements */
-/* ========================= */
-
-const card =
-    document.getElementById("card");
-
-
-const locationFilter =
-    document.getElementById("locationFilter");
-
-const peopleFilter =
-    document.getElementById("peopleFilter");
-
-const categoryFilter =
-    document.getElementById("categoryFilter");
-
-const budgetFilter =
-    document.getElementById("budgetFilter");
-
-
-const locationLabel =
-    document.getElementById("locationLabel");
-
-const peopleLabel =
-    document.getElementById("peopleLabel");
-
-const categoryLabel =
-    document.getElementById("categoryLabel");
-
-const budgetLabel =
-    document.getElementById("budgetLabel");
-
-
-const filterModal =
-    document.getElementById("filterModal");
-
-const modalTitle =
-    document.getElementById("modalTitle");
-
-const modalOptions =
-    document.getElementById("modalOptions");
-
-const closeModal =
-    document.getElementById("closeModal");
-
-
-const savedButton =
-    document.getElementById("savedButton");
-
-const homeButton =
-    document.getElementById("homeButton");
-
-const myButton =
-    document.getElementById("myButton");
-
-
-const savedPage =
-    document.getElementById("savedPage");
-
-const myPage =
-    document.getElementById("myPage");
-
-const closeSaved =
-    document.getElementById("closeSaved");
-
-const closeMy =
-    document.getElementById("closeMy");
-
-const savedList =
-    document.getElementById("savedList");
-
-
-/* ========================= */
-/* State */
-/* ========================= */
-
-let selectedLocation = null;
-let selectedPeople = null;
-let selectedCategory = null;
-let selectedBudget = null;
-
-let currentActivity = null;
-
-let isDragging = false;
-
-let startX = 0;
-let currentX = 0;
-
-
-/* ========================= */
-/* Filter Options */
-/* ========================= */
-
-const filterData = {
-
-    location: {
-
-        title: "어디로?",
-
-        options: [
-            {
-                label: "상관없음",
-                value: null
-            },
-            {
-                label: "서울",
-                value: "서울"
-            },
-            {
-                label: "한강",
-                value: "한강"
-            },
-            {
-                label: "성수",
-                value: "성수"
-            },
-            {
-                label: "홍대",
-                value: "홍대"
-            },
-            {
-                label: "잠실",
-                value: "잠실"
-            }
-        ]
-    },
-
-
-    people: {
-
-        title: "누구와?",
-
-        options: [
-            {
-                label: "상관없음",
-                value: null
-            },
-            {
-                label: "혼자",
-                value: "alone"
-            },
-            {
-                label: "친구",
-                value: "friend"
-            },
-            {
-                label: "연인",
-                value: "couple"
-            }
-        ]
-    },
-
-
-    category: {
-
-        title: "무엇을?",
-
-        options: [
-            {
-                label: "상관없음",
-                value: null
-            },
-            {
-                label: "음식",
-                value: "food"
-            },
-            {
-                label: "자연",
-                value: "nature"
-            },
-            {
-                label: "문화",
-                value: "culture"
-            },
-            {
-                label: "운동",
-                value: "sports"
-            },
-            {
-                label: "활동",
-                value: "activity"
-            },
-            {
-                label: "여행",
-                value: "tour"
-            },
-            {
-                label: "창작",
-                value: "creative"
-            }
-        ]
-    },
-
-
-    budget: {
-
-        title: "얼마까지?",
-
-        options: [
-            {
-                label: "상관없음",
-                value: null
-            },
-            {
-                label: "1만원 이하",
-                value: 10000
-            },
-            {
-                label: "3만원 이하",
-                value: 30000
-            },
-            {
-                label: "5만원 이하",
-                value: 50000
-            }
-        ]
-    }
-
+const state={
+  filters:{who:null,where:null,mood:null},
+  activity:null,
+  dragging:false,
+  startX:0,
+  currentX:0
 };
 
+const filterData={
+  who:{
+    title:"WHO?",
+    options:[["ALL",null],["SOLO","solo"],["DUO","duo"],["GROUP","group"]]
+  },
+  where:{
+    title:"WHERE?",
+    options:[["ALL",null],["INDOOR","indoor"],["OUTDOOR","outdoor"]]
+  },
+  mood:{
+    title:"MOOD?",
+    options:[["ALL",null],["CHILL","chill"],["MODERATE","moderate"],["ACTIVE","active"]]
+  }
+};
 
-/* ========================= */
-/* Open Filter */
-/* ========================= */
-
-function openFilter(type) {
-
-    const data =
-        filterData[type];
-
-
-    modalTitle.textContent =
-        data.title;
-
-
-    modalOptions.innerHTML = "";
-
-
-    let currentValue = null;
-
-
-    if (type === "location") {
-        currentValue =
-            selectedLocation;
-    }
-
-    if (type === "people") {
-        currentValue =
-            selectedPeople;
-    }
-
-    if (type === "category") {
-        currentValue =
-            selectedCategory;
-    }
-
-    if (type === "budget") {
-        currentValue =
-            selectedBudget;
-    }
-
-
-    data.options.forEach(option => {
-
-        const button =
-            document.createElement("button");
-
-
-        button.className =
-            "modal-option";
-
-
-        button.textContent =
-            option.label;
-
-
-        if (
-            option.value ===
-            currentValue
-        ) {
-
-            button.classList.add(
-                "selected"
-            );
-
-        }
-
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    type ===
-                    "location"
-                ) {
-
-                    selectedLocation =
-                        option.value;
-
-                }
-
-
-                if (
-                    type ===
-                    "people"
-                ) {
-
-                    selectedPeople =
-                        option.value;
-
-                }
-
-
-                if (
-                    type ===
-                    "category"
-                ) {
-
-                    selectedCategory =
-                        option.value;
-
-                }
-
-
-                if (
-                    type ===
-                    "budget"
-                ) {
-
-                    selectedBudget =
-                        option.value;
-
-                }
-
-
-                updateFilterButton(
-                    type,
-                    option.value,
-                    option.label
-                );
-
-
-                filterModal.classList.add(
-                    "hidden"
-                );
-
-
-                getRecommendation();
-
-            }
-        );
-
-
-        modalOptions.appendChild(
-            button
-        );
-
-    });
-
-
-    filterModal.classList.remove(
-        "hidden"
-    );
+function escapeHtml(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[char]));
 }
 
-
-/* ========================= */
-/* Filter Button */
-/* ========================= */
-
-function updateFilterButton(
-    type,
-    value,
-    label
-) {
-
-    let button;
-    let labelElement;
-
-
-    if (type === "location") {
-
-        button =
-            locationFilter;
-
-        labelElement =
-            locationLabel;
-
-    }
-
-
-    if (type === "people") {
-
-        button =
-            peopleFilter;
-
-        labelElement =
-            peopleLabel;
-
-    }
-
-
-    if (type === "category") {
-
-        button =
-            categoryFilter;
-
-        labelElement =
-            categoryLabel;
-
-    }
-
-
-    if (type === "budget") {
-
-        button =
-            budgetFilter;
-
-        labelElement =
-            budgetLabel;
-
-    }
-
-
-    if (value !== null) {
-
-        button.classList.add(
-            "selected"
-        );
-
-        labelElement.textContent =
-            label;
-
-    }
-
-    else {
-
-        button.classList.remove(
-            "selected"
-        );
-
-
-        if (
-            type === "location"
-        ) {
-
-            labelElement.textContent =
-                "어디로?";
-
-        }
-
-        if (
-            type === "people"
-        ) {
-
-            labelElement.textContent =
-                "누구와?";
-
-        }
-
-        if (
-            type === "category"
-        ) {
-
-            labelElement.textContent =
-                "무엇을?";
-
-        }
-
-        if (
-            type === "budget"
-        ) {
-
-            labelElement.textContent =
-                "얼마까지?";
-
-        }
-
-    }
+function updateFilterLabel(type){
+  const value=state.filters[type];
+  const selected=filterData[type].options.find(option=>option[1]===value);
+  $(`${type}Label`).textContent=selected?selected[0]:"ALL";
+  document.querySelector(`[data-filter="${type}"]`).classList.toggle("selected",value!==null);
 }
 
+function openFilter(type){
+  const data=filterData[type];
+  $("filterTitle").textContent=data.title;
+  $("filterOptions").innerHTML=data.options.map(([label,value])=>`
+    <button class="filter-option ${state.filters[type]===value?"selected":""}"
+            data-value="${value??""}">
+      ${label}
+    </button>
+  `).join("");
 
-/* ========================= */
-/* Recommendation */
-/* ========================= */
+  $("filterOptions").querySelectorAll(".filter-option").forEach(button=>{
+    button.onclick=()=>{
+      const raw=button.dataset.value;
+      state.filters[type]=raw===""?null:raw;
+      updateFilterLabel(type);
+      $("filterOverlay").classList.add("hidden");
+      getRecommendation();
+    };
+  });
 
-async function getRecommendation() {
+  $("filterOverlay").classList.remove("hidden");
+}
 
-    card.innerHTML = `
+async function getRecommendation(){
+  const card=$("nudgeCard");
+  card.innerHTML=`
+    <div class="loader">
+      <div class="spinner"></div>
+      <span>Finding your nudge...</span>
+    </div>`;
 
-        <div class="loading">
+  try{
+    const params=new URLSearchParams();
 
-            <div class="loading-dot"></div>
+    const who=state.filters.who;
+    if(who==="solo")params.set("people","alone");
+    if(who==="duo")params.set("people","couple");
+    if(who==="group")params.set("people","friend");
 
-            <p>
-                오늘의 활동을<br>
-                고르는 중...
-            </p>
+    const response=await fetch(`${API_URL}/recommend?${params.toString()}`);
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
 
+    const activity=await response.json();
+
+    if(activity.message){
+      card.innerHTML=`<div class="loader"><span>${escapeHtml(activity.message)}</span></div>`;
+      state.activity=null;
+      return;
+    }
+
+    state.activity=activity;
+    renderCard(activity);
+  }catch(error){
+    state.activity=null;
+    card.innerHTML=`
+      <div class="loader">
+        <span>Backend connection failed.</span>
+        <small style="color:#555">${escapeHtml(error.message)}</small>
+      </div>`;
+  }
+}
+
+function renderCard(activity){
+  const cost=Number(activity.cost||0).toLocaleString();
+  const duration=activity.duration?`${activity.duration} min`:"TIME TBD";
+
+  $("nudgeCard").innerHTML=`
+    <div class="card-content">
+      <span class="category">${escapeHtml(
+        String(activity.category||"TODAY").toUpperCase()
+      )}</span>
+
+      <h2>${escapeHtml(activity.title||"Your next nudge")}</h2>
+
+      <p class="card-description">
+        ${escapeHtml(
+          activity.description||"A small activity worth adding to your day."
+        )}
+      </p>
+
+      <div class="card-chips">
+        <span class="chip">📍 ${escapeHtml(activity.location||"Anywhere")}</span>
+        <span class="chip">₩ ${cost}</span>
+        <span class="chip">⏱ ${duration}</span>
+      </div>
+    </div>`;
+
+  $("nudgeCard").style.transition="";
+  $("nudgeCard").style.transform="translateX(0) rotate(0)";
+  $("nudgeCard").style.opacity="1";
+}
+
+function getSaved(){
+  try{return JSON.parse(localStorage.getItem("nudge_saved")||"[]")}
+  catch{return []}
+}
+
+function saveActivity(activity){
+  if(!activity)return;
+  const saved=getSaved();
+
+  if(!saved.some(item=>String(item.id)===String(activity.id))){
+    saved.push(activity);
+    localStorage.setItem("nudge_saved",JSON.stringify(saved));
+  }
+}
+
+function swipe(direction){
+  if(!state.activity)return;
+
+  if(direction>0)saveActivity(state.activity);
+
+  const card=$("nudgeCard");
+  card.style.transition="transform .35s ease, opacity .35s ease";
+  card.style.transform=`translateX(${direction*600}px) rotate(${direction*28}deg)`;
+  card.style.opacity="0";
+
+  setTimeout(getRecommendation,350);
+}
+
+function pointerDown(event){
+  if(!state.activity)return;
+
+  state.dragging=true;
+  state.startX=event.clientX;
+  state.currentX=0;
+
+  $("nudgeCard").style.transition="none";
+  $("nudgeCard").style.cursor="grabbing";
+  $("nudgeCard").setPointerCapture?.(event.pointerId);
+}
+
+function pointerMove(event){
+  if(!state.dragging)return;
+
+  state.currentX=event.clientX-state.startX;
+  $("nudgeCard").style.transform=
+    `translateX(${state.currentX}px) rotate(${state.currentX/18}deg)`;
+}
+
+function pointerUp(){
+  if(!state.dragging)return;
+
+  const distance=state.currentX;
+  state.dragging=false;
+  $("nudgeCard").style.cursor="grab";
+
+  if(distance>120)swipe(1);
+  else if(distance<-120)swipe(-1);
+  else{
+    $("nudgeCard").style.transition="transform .25s ease";
+    $("nudgeCard").style.transform="translateX(0) rotate(0)";
+  }
+
+  state.currentX=0;
+}
+
+function openMission(){
+  if(!state.activity)return;
+
+  const a=state.activity;
+
+  $("missionContent").innerHTML=`
+    <div class="mission-hero">
+      <p class="mission-tag">MISSION 01 · TODAY'S NUDGE</p>
+
+      <h1 class="mission-title">${escapeHtml(
+        a.title||"Your Nudge"
+      )}</h1>
+
+      <p class="mission-description">${escapeHtml(
+        a.description||"오늘 하루에 가볍게 더해볼 만한 활동이에요."
+      )}</p>
+
+      <div class="mission-meta">
+        <span>📍 ${escapeHtml(a.location||"Anywhere")}</span>
+        <span>⏱ ${escapeHtml(a.duration||"—")} MIN</span>
+      </div>
+
+      <div class="mission-box">
+        <div class="label">YOUR INSTRUCTION</div>
+
+        <p>오늘은 고민하지 말고 바로 시작해보세요.</p>
+
+        <div class="mission-steps">
+          <div class="mission-step">
+            <span class="step-num">1</span>
+            <span>준비물을 챙기고 장소로 이동하세요.</span>
+          </div>
+          <div class="mission-step">
+            <span class="step-num">2</span>
+            <span>최소 20분 동안 이 활동에 집중해보세요.</span>
+          </div>
+          <div class="mission-step">
+            <span class="step-num">3</span>
+            <span>끝난 뒤 오늘의 Nudge를 Collection에 기록하세요.</span>
+          </div>
         </div>
+      </div>
 
-    `;
+      <button class="mission-start" id="missionStart">
+        START MISSION
+      </button>
+    </div>`;
 
+  $("missionPage").classList.add("active");
 
-    try {
-
-        const params =
-            new URLSearchParams();
-
-
-        if (
-            selectedPeople !==
-            null
-        ) {
-
-            params.append(
-                "people",
-                selectedPeople
-            );
-
-        }
-
-
-        if (
-            selectedBudget !==
-            null
-        ) {
-
-            params.append(
-                "max_cost",
-                selectedBudget
-            );
-
-        }
-
-
-        if (
-            selectedCategory !==
-            null
-        ) {
-
-            params.append(
-                "category",
-                selectedCategory
-            );
-
-        }
-
-
-        /*
-         * 현재 백엔드가
-         * location을 아직 지원하지
-         * 않으므로 프론트에서만
-         * 선택 상태를 유지한다.
-         */
-
-
-        const url =
-            `${API_URL}/recommend?${params.toString()}`;
-
-
-        const response =
-            await fetch(url);
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "추천을 가져오지 못했습니다."
-            );
-
-        }
-
-
-        const activity =
-            await response.json();
-
-
-        if (activity.message) {
-
-            card.innerHTML = `
-
-                <div class="loading">
-
-                    <p>
-                        ${activity.message}
-                    </p>
-
-                </div>
-
-            `;
-
-            return;
-        }
-
-
-        currentActivity =
-            activity;
-
-
-        showActivity(
-            activity
-        );
-
-    }
-
-    catch (error) {
-
-        card.innerHTML = `
-
-            <div class="loading">
-
-                <p>
-                    추천을 불러오지 못했어요.
-                </p>
-
-                <p class="card-description">
-                    ${error.message}
-                </p>
-
-            </div>
-
-        `;
-
-        console.error(error);
-    }
+  $("missionStart").onclick=()=>{
+    saveActivity(a);
+    $("missionStart").textContent="MISSION SAVED ✓";
+  };
 }
 
+function showPage(page){
+  document.querySelectorAll(".screen").forEach(screen=>{
+    screen.classList.remove("active");
+  });
 
-/* ========================= */
-/* Show Activity */
-/* ========================= */
+  $(`${page}Page`).classList.add("active");
 
-function showActivity(activity) {
+  document.querySelectorAll(".nav-btn").forEach(button=>{
+    button.classList.toggle("active",button.dataset.page===page);
+  });
 
-    const cost =
-        Number(activity.cost)
-            .toLocaleString();
-
-
-    const duration =
-        activity.duration
-            ? `${activity.duration}분`
-            : "시간 정보 없음";
-
-
-    /*
-     * description/image은
-     * 백엔드에 없어도 작동하도록
-     * 안전하게 처리한다.
-     */
-
-    const description =
-        activity.description ||
-        "오늘 하루에 가볍게 더해볼 만한 활동이에요.";
-
-
-    let imageHTML = `
-
-        <div class="card-image">
-
-            <div class="card-image-placeholder">
-                ✦
-            </div>
-
-        </div>
-
-    `;
-
-
-    /*
-     * 나중에 backend에서
-     * image 또는 image_url을
-     * 보내면 자동으로 이미지 사용.
-     */
-
-    const image =
-        activity.image ||
-        activity.image_url;
-
-
-    if (image) {
-
-        imageHTML = `
-
-            <div class="card-image">
-
-                <img
-                    src="${image}"
-                    alt="${activity.title}"
-                >
-
-            </div>
-
-        `;
-
-    }
-
-
-    card.innerHTML = `
-
-        ${imageHTML}
-
-
-        <div class="card-content">
-
-            <span class="card-category">
-                TODAY
-            </span>
-
-
-            <h2>
-                ${activity.title}
-            </h2>
-
-
-            <p class="card-description">
-                ${description}
-            </p>
-
-
-            <div class="card-info">
-
-                <span class="info-chip">
-                    📍 ${activity.location}
-                </span>
-
-
-                <span class="info-chip">
-                    ₩ ${cost}
-                </span>
-
-
-                <span class="info-chip">
-                    ⏱ ${duration}
-                </span>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    card.style.transition =
-        "none";
-
-
-    card.style.transform =
-        "translateX(0) rotate(0deg)";
-
-
-    card.style.opacity =
-        "1";
-
-
-    card.style.cursor =
-        "grab";
+  if(page==="social")renderFriends();
+  if(page==="my")renderMy();
+  if(page==="saved")renderSaved();
 }
 
+function renderFriends(){
+  const friends=[
+    ["Jin","WEEKEND EXPLORER","82%","J"],
+    ["Sora","CITY WALKER","74%","S"],
+    ["Min","FIRST NUDGE","61%","M"],
+    ["Alex","NIGHT OWL","53%","A"]
+  ];
 
-/* ========================= */
-/* Drag */
-/* ========================= */
-
-function startDrag(event) {
-
-    if (!currentActivity) {
-        return;
-    }
-
-
-    isDragging = true;
-
-
-    startX =
-        event.clientX;
-
-
-    card.style.transition =
-        "none";
-
-
-    card.style.cursor =
-        "grabbing";
-
-
-    card.setPointerCapture(
-        event.pointerId
-    );
+  $("friendsList").innerHTML=friends.map(friend=>`
+    <div class="friend">
+      <div class="friend-avatar">${friend[3]}</div>
+      <div class="friend-main">
+        <strong>${friend[0]}</strong>
+        <small>${friend[1]}</small>
+      </div>
+      <div class="friend-rate">
+        <strong>${friend[2]}</strong>
+        <span>COLLECTED</span>
+      </div>
+    </div>
+  `).join("");
 }
 
+function renderSaved(){
+  const saved=getSaved();
 
-function drag(event) {
+  $("savedList").innerHTML=saved.length?saved.map(activity=>`
+    <div class="saved-item">
+      <div>
+        <h3>${escapeHtml(activity.title||"Untitled")}</h3>
+        <p>${escapeHtml(activity.location||"Anywhere")} · ${escapeHtml(activity.duration||"—")} min</p>
+      </div>
+      <button class="remove-btn" data-id="${escapeHtml(activity.id)}">×</button>
+    </div>
+  `).join(""):`
+    <div class="loader" style="height:300px">
+      <span>No saved nudges yet.</span>
+    </div>`;
 
-    if (!isDragging) {
-        return;
-    }
-
-
-    currentX =
-        event.clientX -
-        startX;
-
-
-    const rotation =
-        currentX / 18;
-
-
-    card.style.transform =
-        `translateX(${currentX}px)
-         rotate(${rotation}deg)`;
+  $("savedList").querySelectorAll(".remove-btn").forEach(button=>{
+    button.onclick=()=>{
+      const next=getSaved().filter(
+        activity=>String(activity.id)!==String(button.dataset.id)
+      );
+      localStorage.setItem("nudge_saved",JSON.stringify(next));
+      renderSaved();
+    };
+  });
 }
 
-
-function endDrag() {
-
-    if (!isDragging) {
-        return;
-    }
-
-
-    isDragging = false;
-
-
-    card.style.cursor =
-        "grab";
-
-
-    const threshold =
-        120;
-
-
-    if (
-        currentX >
-        threshold
-    ) {
-
-        swipe("like");
-
-    }
-
-    else if (
-        currentX <
-        -threshold
-    ) {
-
-        swipe("dislike");
-
-    }
-
-    else {
-
-        card.style.transition =
-            "transform 0.3s ease";
-
-
-        card.style.transform =
-            "translateX(0) rotate(0deg)";
-    }
-
-
-    currentX = 0;
+function renderMy(){
+  document.querySelectorAll(".menu-row").forEach(row=>{
+    row.onclick=()=>openMyPanel(row.dataset.panel);
+  });
 }
 
+function openMyPanel(type){
+  const panel=$("myPanel");
+  panel.classList.remove("hidden");
 
-/* ========================= */
-/* Swipe */
-/* ========================= */
+  const content={
+    saved:[
+      "SAVED",
+      "Your saved nudges live here.",
+      "Open Saved to review the activities you kept."
+    ],
+    collection:[
+      "COLLECTION",
+      "68% complete",
+      "Complete more nudges to fill your activity collection."
+    ],
+    titles:[
+      "TITLES",
+      "YOUR TITLES",
+      "Day Explorer · City Walker · Early Bird · Weekend Mode"
+    ],
+    theme:[
+      "THEME",
+      "Choose your Nudge mood.",
+      ""
+    ]
+  }[type];
 
-function swipe(type) {
+  panel.innerHTML=`
+    <div class="panel-title">${content[0]}</div>
+    <p class="panel-note">${content[1]}<br>${content[2]}</p>
+    ${type==="theme"?`
+      <div class="theme-grid">
+        <button class="theme-choice theme-dark active" data-theme="dark"></button>
+        <button class="theme-choice theme-lime" data-theme="lime"></button>
+        <button class="theme-choice theme-blue" data-theme="blue"></button>
+      </div>`:""}`;
 
-    if (!currentActivity) {
-        return;
-    }
-
-
-    const direction =
-        type === "like"
-            ? 1
-            : -1;
-
-
-    if (
-        type === "like"
-    ) {
-
-        saveActivity(
-            currentActivity
-        );
-
-    }
-
-
-    card.style.transition =
-        "transform 0.35s ease, opacity 0.35s ease";
-
-
-    card.style.transform =
-        `translateX(${direction * 600}px)
-         rotate(${direction * 30}deg)`;
-
-
-    card.style.opacity =
-        "0";
-
-
-    setTimeout(
-        () => {
-
-            getRecommendation();
-
-        },
-        350
-    );
+  panel.querySelectorAll(".theme-choice").forEach(choice=>{
+    choice.onclick=()=>{
+      panel.querySelectorAll(".theme-choice").forEach(item=>{
+        item.classList.remove("active");
+      });
+      choice.classList.add("active");
+    };
+  });
 }
 
+document.querySelectorAll(".filter-btn").forEach(button=>{
+  button.onclick=()=>openFilter(button.dataset.filter);
+});
 
-/* ========================= */
-/* Saved */
-/* ========================= */
+$("closeFilter").onclick=()=>$("filterOverlay").classList.add("hidden");
 
-function getSaved() {
+$("filterOverlay").onclick=event=>{
+  if(event.target===$("filterOverlay")){
+    $("filterOverlay").classList.add("hidden");
+  }
+};
 
-    return JSON.parse(
-        localStorage.getItem(
-            "nudge_saved"
-        ) || "[]"
-    );
-}
+document.querySelectorAll(".nav-btn").forEach(button=>{
+  button.onclick=()=>showPage(button.dataset.page);
+});
 
+$("closeMission").onclick=()=>{
+  $("missionPage").classList.remove("active");
+  $("homePage").classList.add("active");
+};
 
-function saveActivity(
-    activity
-) {
+$("nudgeCard").addEventListener("pointerdown",pointerDown);
+$("nudgeCard").addEventListener("pointermove",pointerMove);
+$("nudgeCard").addEventListener("pointerup",pointerUp);
+$("nudgeCard").addEventListener("pointercancel",pointerUp);
 
-    const saved =
-        getSaved();
 
-
-    const exists =
-        saved.some(
-            item =>
-                item.id ===
-                activity.id
-        );
-
-
-    if (!exists) {
-
-        saved.push(
-            activity
-        );
-
-
-        localStorage.setItem(
-            "nudge_saved",
-            JSON.stringify(saved)
-        );
-
-    }
-}
-
-
-function removeSaved(id) {
-
-    const saved =
-        getSaved().filter(
-            item =>
-                item.id !== id
-        );
-
-
-    localStorage.setItem(
-        "nudge_saved",
-        JSON.stringify(saved)
-    );
-
-
-    renderSaved();
-}
-
-
-function renderSaved() {
-
-    const saved =
-        getSaved();
-
-
-    if (
-        saved.length === 0
-    ) {
-
-        savedList.innerHTML = `
-
-            <div class="empty">
-
-                아직 저장한 활동이 없어요.<br>
-                마음에 드는 활동을 오른쪽으로 넘겨보세요.
-
-            </div>
-
-        `;
-
-        return;
-    }
-
-
-    savedList.innerHTML =
-        saved.map(
-            activity => `
-
-                <div class="saved-item">
-
-                    <div>
-
-                        <h3>
-                            ${activity.title}
-                        </h3>
-
-                        <p>
-                            📍 ${activity.location}
-                            ·
-                            ₩ ${Number(
-                                activity.cost
-                            ).toLocaleString()}원
-                        </p>
-
-                    </div>
-
-
-                    <button
-                        class="remove-saved"
-                        onclick="removeSaved(${activity.id})"
-                    >
-                        ×
-                    </button>
-
-                </div>
-
-            `
-        ).join("");
-}
-
-
-/* ========================= */
-/* Pages */
-/* ========================= */
-
-function showHome() {
-
-    savedPage.classList.add(
-        "hidden"
-    );
-
-    myPage.classList.add(
-        "hidden"
-    );
-
-
-    homeButton.classList.add(
-        "active"
-    );
-
-    savedButton.classList.remove(
-        "active"
-    );
-
-    myButton.classList.remove(
-        "active"
-    );
-}
-
-
-function showSaved() {
-
-    renderSaved();
-
-
-    savedPage.classList.remove(
-        "hidden"
-    );
-
-    myPage.classList.add(
-        "hidden"
-    );
-
-
-    homeButton.classList.remove(
-        "active"
-    );
-
-    savedButton.classList.add(
-        "active"
-    );
-
-    myButton.classList.remove(
-        "active"
-    );
-}
-
-
-function showMy() {
-
-    myPage.classList.remove(
-        "hidden"
-    );
-
-    savedPage.classList.add(
-        "hidden"
-    );
-
-
-    homeButton.classList.remove(
-        "active"
-    );
-
-    savedButton.classList.remove(
-        "active"
-    );
-
-    myButton.classList.add(
-        "active"
-    );
-}
-
-
-/* ========================= */
-/* Events */
-/* ========================= */
-
-locationFilter.addEventListener(
-    "click",
-    () =>
-        openFilter("location")
-);
-
-
-peopleFilter.addEventListener(
-    "click",
-    () =>
-        openFilter("people")
-);
-
-
-categoryFilter.addEventListener(
-    "click",
-    () =>
-        openFilter("category")
-);
-
-
-budgetFilter.addEventListener(
-    "click",
-    () =>
-        openFilter("budget")
-);
-
-
-closeModal.addEventListener(
-    "click",
-    () => {
-
-        filterModal.classList.add(
-            "hidden"
-        );
-
-    }
-);
-
-
-filterModal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            filterModal
-        ) {
-
-            filterModal.classList.add(
-                "hidden"
-            );
-
-        }
-
-    }
-);
-
-
-savedButton.addEventListener(
-    "click",
-    showSaved
-);
-
-
-homeButton.addEventListener(
-    "click",
-    showHome
-);
-
-
-myButton.addEventListener(
-    "click",
-    showMy
-);
-
-
-closeSaved.addEventListener(
-    "click",
-    showHome
-);
-
-
-closeMy.addEventListener(
-    "click",
-    showHome
-);
-
-
-/* ========================= */
-/* Card Pointer Events */
-/* ========================= */
-
-card.addEventListener(
-    "pointerdown",
-    startDrag
-);
-
-
-card.addEventListener(
-    "pointermove",
-    drag
-);
-
-
-card.addEventListener(
-    "pointerup",
-    endDrag
-);
-
-
-card.addEventListener(
-    "pointercancel",
-    endDrag
-);
-
-
-/* ========================= */
-/* Start */
-/* ========================= */
 
 getRecommendation();
+
+// ===============================
+// V2 GESTURE / NAVIGATION FIXES
+// ===============================
+(function () {
+  const back = document.getElementById('backButton');
+
+  function setBackVisible(visible) {
+    if (!back) return;
+    back.classList.toggle('visible', !!visible);
+  }
+
+  if (back) {
+    back.addEventListener('click', function () {
+      // Return to the main Nudge screen without changing browser history.
+      document.querySelectorAll('.mission-view, .detail-view, .expanded-card, [data-view="mission"]')
+        .forEach(el => el.classList.remove('active', 'visible', 'open', 'expanded'));
+      document.querySelectorAll('.nudge-view, .home-view, [data-view="nudge"]')
+        .forEach(el => el.classList.add('active', 'visible'));
+      setBackVisible(false);
+    });
+  }
+
+  // Prevent a card tap from opening the mission. Only completed swipe gestures may do so.
+  let startX = null;
+  let startY = null;
+  let moved = false;
+
+  document.addEventListener('pointerdown', function (e) {
+    const card = e.target.closest('.nudge-card, .card');
+    if (!card) return;
+    startX = e.clientX;
+    startY = e.clientY;
+    moved = false;
+  }, true);
+
+  document.addEventListener('pointermove', function (e) {
+    if (startX === null) return;
+    if (Math.abs(e.clientX - startX) > 12 || Math.abs(e.clientY - startY) > 12) {
+      moved = true;
+    }
+  }, true);
+
+  document.addEventListener('click', function (e) {
+    const card = e.target.closest('.nudge-card, .card');
+    if (!card) return;
+    if (!moved) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+    startX = startY = null;
+  }, true);
+})();
